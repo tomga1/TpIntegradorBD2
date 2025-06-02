@@ -23,3 +23,15 @@ Gestión de canchas y tipos.
 Control de sucursales y localidades.
 Promociones y descuentos.
 La base de datos incluye tres vistas, dos procedimientos almacenados y dos triggers, automatizando tareas clave y asegurando la consistencia de los datos. También se desarrolló el Diagrama Entidad-Relación (DER) con todas las tablas y campos definidos.
+
+-----------------------------------------------------------------
+SCRIPT PARA CREAR LA BASE DE DATOS
+------------------------------------------------------------------
+
+CREATE DATABASE Canchas_BD2;
+
+CREATE TABLE Localidad(
+id_localidad INT NOT NULL PRIMARY KEY, 
+Nombre VARCHAR (100) NOT NULL
+);
+ 
