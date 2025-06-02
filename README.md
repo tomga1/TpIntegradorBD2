@@ -27,5 +27,14 @@ CREATE DATABASE Canchas_BD2;
 
 CREATE TABLE Localidad (
     id_localidad INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    Nombre VARCHAR(100) NOT NULL
+    Nombre VARCHAR(50) NOT NULL
 );
+
+CREATE TABLE Sucursal (
+    id_sucursal INT IDENTITY (1,1) NOT NULL PRIMARY KEY,
+    id_localidad INT NOT NULL FOREIGN KEY REFERENCES Localidad (id_localidad),
+    Nombre VARCHAR (50),
+    Telefono VARCHAR (20),
+    Mail VARCHAR (50)
+);    
+    
