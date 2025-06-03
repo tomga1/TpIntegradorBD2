@@ -55,8 +55,8 @@ CREATE TABLE Usuarios (
     Nombre VARCHAR (50),
     Apellido VARCHAR (50),
     Direccion VARCHAR (50),
-    CUIT INT,
-    Telefono INT,
+    CUIT CHAR(20),
+    Telefono CHAR(10),
     Contraseña VARCHAR (20), //Podemos poner un CHECK para que sea minimo 8 max 12
     Fecha_Alta DATATIME
 );
