@@ -37,4 +37,14 @@ CREATE TABLE Sucursal (
     Telefono VARCHAR (20),
     Mail VARCHAR (50)
 );    
+
+CREATE TABLE Estados (
+    id_estado INT IDENTITY(1,1) PRIMARY KEY,
+    descripcion VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Roles (
+    id_rol INT IDENTITY(1,1) PRIMARY KEY,
+    nombre_rol VARCHAR(100) NOT NULL
+);
     
