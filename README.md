@@ -60,3 +60,15 @@ CREATE TABLE Usuarios (
     Contraseña VARCHAR (20), //Podemos poner un CHECK para que sea minimo 8 max 12
     Fecha_Alta DATATIME
 );
+CREATE TABLE Reservas (
+    id_reserva INT NOT NULL PRIMARY KEY IDENTITY (1,1),
+    id_usuario INT NOT NULL FOREIGN KEY REFERENCES Usuarios(id_usuario),
+    id_cancha INT FOREIGN KEY REFERENCES Canchas(id_cancha),
+    id_estado INT NOT NULL FOREIGN KEY REFERENCES Estados(id_estado),
+    hora_f DATETIME,
+    hora_inicio DATETIME NOT NULL,
+    fecha_reserva DATETIME DEFAULT GETDATE(),
+    monto_total MONEY
+);
+
+
