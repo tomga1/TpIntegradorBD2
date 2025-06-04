@@ -87,5 +87,25 @@ CREATE TABLE Horarios_Disponibles (
     hora_fin DATETIME NOT NULL CHECK (hora_fin > hora_inicio),
     dia_semana INT NOT NULL CHECK (dia_semana BETWEEN 0 AND 6) -- 0 = Domingo, 6 = Sábado
 );
+CREATE TABLE Promociones (
+    id_promocion INT NOT NULL PRIMARY KEY IDENTITY (1,1),
+    id_valor_tipo_cancha INT NOT NULL FOREIGN KEY REFERENCES Valores_Tipo_Cancha(id_valor_tipo_cancha),
+    id_tipo_cancha INT NOT NULL FOREIGN KEY REFERENCES Tipos_Cancha(id_tipo_cancha),
+    nombre_promocion VARCHAR(100) NOT NULL,
+    fecha_inicio DATETIME NOT NULL,
+    fecha_fin DATETIME NOT NULL CHECK (fecha_fin > fecha_inicio),
+    dia_semana INT NOT NULL CHECK (dia_semana BETWEEN 0 AND 6), -- 0 = Domingo, 6 = Sábado
+    desc_porcentual DECIMAL(5,2) NOT NULL CHECK (desc_porcentual BETWEEN 0 AND 100) -- Descuento en porcentaje
+);
+CREATE TABLE Valor_Tipo_Cancha (
+    id_valor_tipo_cancha INT NOT NULL PRIMARY KEY IDENTITY (1,1),
+    id_tipo_cancha INT NOT NULL FOREIGN KEY REFERENCES Tipos_Cancha(id_tipo_cancha),
+    valor MONEY NOT NULL CHECK (valor > 0) -- Asegura que el valor sea positivo
+);
+CREATE TABLE Tipo_Cancha (
+    id_tipo_cancha INT NOT NULL PRIMARY KEY IDENTITY (1,1),
+    id_valor_tipo_cancha INT NOT NULL FOREIGN KEY REFERENCES Valor_Tipo_Cancha(id_valor_tipo_cancha),
+    nombre VARCHAR(50) NOT NULL
+);
 
 
