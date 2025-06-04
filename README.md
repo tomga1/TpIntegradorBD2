@@ -70,5 +70,14 @@ CREATE TABLE Reservas (
     fecha_reserva DATETIME DEFAULT GETDATE(),
     monto_total MONEY
 );
+CREATE TABLE Canchas (
+    id_cancha INT NOT NULL PRIMARY KEY IDENTITY (1,1),
+    id_estado INT NOT NULL FOREIGN KEY REFERENCES Estados(id_estado),
+    id_tipo_cancha INT NOT NULL FOREIGN KEY REFERENCES Tipos_Cancha(id_tipo_cancha),
+    id_sucursal INT NOT NULL FOREIGN KEY REFERENCES Sucursales(id_sucursal),
+    nombre VARCHAR(50) NOT NULL,
+    iluminacion BIT NOT NULL CHECK (iluminacion IN (0, 1)), -- 0: Sin iluminación, 1: Con iluminación
+    techada BIT NOT NULL CHECK (techada IN (0, 1)) -- 0: No techada, 1: Techada
+);
 
 
