@@ -79,5 +79,13 @@ CREATE TABLE Canchas (
     iluminacion BIT NOT NULL CHECK (iluminacion IN (0, 1)), -- 0: Sin iluminación, 1: Con iluminación
     techada BIT NOT NULL CHECK (techada IN (0, 1)) -- 0: No techada, 1: Techada
 );
+CREATE TABLE Horarios_Disponibles (
+    id_horario_dispo INT NOT NULL PRIMARY KEY IDENTITY (1,1),
+    id_cancha INT NOT NULL FOREIGN KEY REFERENCES Canchas(id_cancha),
+    id_estado INT NOT NULL FOREIGN KEY REFERENCES Estados(id_estado),
+    hora_inicio DATETIME NOT NULL,
+    hora_fin DATETIME NOT NULL CHECK (hora_fin > hora_inicio),
+    dia_semana INT NOT NULL CHECK (dia_semana BETWEEN 0 AND 6) -- 0 = Domingo, 6 = Sábado
+);
 
 
