@@ -25,6 +25,16 @@ SCRIPT PARA CREAR LA BASE DE DATOS
 
 CREATE DATABASE Canchas_BD2;
 
+CREATE TABLE Estados (
+    id_estado INT IDENTITY (1,1) NOT NULL PRIMARY KEY,
+    Descripcion VARCHAR (50) NOT NULL
+);
+
+CREATE TABLE Roles (
+    id_rol INT IDENTITY (1,1) NOT NULL PRIMARY KEY,
+    Nombre_Rol VARCHAR(50) NOT NULL
+);
+
 CREATE TABLE Localidad (
     id_localidad INT IDENTITY (1,1) NOT NULL PRIMARY KEY,
     Nombre VARCHAR(50) NOT NULL
@@ -38,16 +48,6 @@ CREATE TABLE Sucursal (
     Mail VARCHAR (50)
 );    
 
-CREATE TABLE Estados (
-    id_estado INT IDENTITY (1,1) NOT NULL PRIMARY KEY,
-    Descripcion VARCHAR (50) NOT NULL
-);
-
-CREATE TABLE Roles (
-    id_rol INT IDENTITY (1,1) NOT NULL PRIMARY KEY,
-    Nombre_Rol VARCHAR(50) NOT NULL
-);
-
 CREATE TABLE Usuarios (
     id_usuario INT IDENTITY (1,1) NOT NULL PRIMARY KEY,
     id_rol INT NOT NULL FOREIGN KEY REFERENCES Roles (id_rol),
@@ -58,8 +58,39 @@ CREATE TABLE Usuarios (
     CUIT CHAR(20),
     Telefono CHAR(10),
     Contraseña VARCHAR (20), //Podemos poner un CHECK para que sea minimo 8 max 12
-    Fecha_Alta DATATIME
+    Fecha_Alta DATETIME
 );
+
+CREATE TABLE Tipo_Cancha (
+    id_tipo_cancha INT NOT NULL PRIMARY KEY IDENTITY (1,1),
+    nombre VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Valor_Tipo_Cancha (
+    id_valor_tipo_cancha INT NOT NULL PRIMARY KEY IDENTITY (1,1),
+    id_tipo_cancha INT NOT NULL FOREIGN KEY REFERENCES Tipo_Cancha(id_tipo_cancha),
+    valor MONEY NOT NULL CHECK (valor > 0)
+);
+
+CREATE TABLE Canchas (
+    id_cancha INT NOT NULL PRIMARY KEY IDENTITY (1,1),
+    id_estado INT NOT NULL FOREIGN KEY REFERENCES Estados(id_estado),
+    id_tipo_cancha INT NOT NULL FOREIGN KEY REFERENCES Tipos_Cancha(id_tipo_cancha),
+    id_sucursal INT NOT NULL FOREIGN KEY REFERENCES Sucursales(id_sucursal),
+    nombre VARCHAR(50) NOT NULL,
+    iluminacion BIT NOT NULL CHECK (iluminacion IN (0, 1)), -- 0: Sin iluminación, 1: Con iluminación
+    techada BIT NOT NULL CHECK (techada IN (0, 1)) -- 0: No techada, 1: Techada
+);
+
+CREATE TABLE Horarios_Disponibles (
+    id_horario_dispo INT NOT NULL PRIMARY KEY IDENTITY (1,1),
+    id_cancha INT NOT NULL FOREIGN KEY REFERENCES Canchas(id_cancha),
+    id_estado INT NOT NULL FOREIGN KEY REFERENCES Estados(id_estado),
+    hora_inicio DATETIME NOT NULL,
+    hora_fin DATETIME NOT NULL CHECK (hora_fin > hora_inicio),
+    dia_semana INT NOT NULL CHECK (dia_semana BETWEEN 0 AND 6) -- 0 = Domingo, 6 = Sábado
+);
+
 CREATE TABLE Reservas (
     id_reserva INT NOT NULL PRIMARY KEY IDENTITY (1,1),
     id_usuario INT NOT NULL FOREIGN KEY REFERENCES Usuarios(id_usuario),
@@ -70,23 +101,7 @@ CREATE TABLE Reservas (
     fecha_reserva DATETIME DEFAULT GETDATE(),
     monto_total MONEY
 );
-CREATE TABLE Canchas (
-    id_cancha INT NOT NULL PRIMARY KEY IDENTITY (1,1),
-    id_estado INT NOT NULL FOREIGN KEY REFERENCES Estados(id_estado),
-    id_tipo_cancha INT NOT NULL FOREIGN KEY REFERENCES Tipos_Cancha(id_tipo_cancha),
-    id_sucursal INT NOT NULL FOREIGN KEY REFERENCES Sucursales(id_sucursal),
-    nombre VARCHAR(50) NOT NULL,
-    iluminacion BIT NOT NULL CHECK (iluminacion IN (0, 1)), -- 0: Sin iluminación, 1: Con iluminación
-    techada BIT NOT NULL CHECK (techada IN (0, 1)) -- 0: No techada, 1: Techada
-);
-CREATE TABLE Horarios_Disponibles (
-    id_horario_dispo INT NOT NULL PRIMARY KEY IDENTITY (1,1),
-    id_cancha INT NOT NULL FOREIGN KEY REFERENCES Canchas(id_cancha),
-    id_estado INT NOT NULL FOREIGN KEY REFERENCES Estados(id_estado),
-    hora_inicio DATETIME NOT NULL,
-    hora_fin DATETIME NOT NULL CHECK (hora_fin > hora_inicio),
-    dia_semana INT NOT NULL CHECK (dia_semana BETWEEN 0 AND 6) -- 0 = Domingo, 6 = Sábado
-);
+
 CREATE TABLE Promociones (
     id_promocion INT NOT NULL PRIMARY KEY IDENTITY (1,1),
     id_valor_tipo_cancha INT NOT NULL FOREIGN KEY REFERENCES Valores_Tipo_Cancha(id_valor_tipo_cancha),
@@ -95,17 +110,11 @@ CREATE TABLE Promociones (
     fecha_inicio DATETIME NOT NULL,
     fecha_fin DATETIME NOT NULL CHECK (fecha_fin > fecha_inicio),
     dia_semana INT NOT NULL CHECK (dia_semana BETWEEN 0 AND 6), -- 0 = Domingo, 6 = Sábado
-    desc_porcentual DECIMAL(5,2) NOT NULL CHECK (desc_porcentual BETWEEN 0 AND 100) -- Descuento en porcentaje
+    desc_porcentual DECIMAL(5,2) NOT NULL CHECK (desc_porcentual BETWEEN 0 AND 100) -- Descuento en porcentaje,
+    id_estado INT NOT NULL FOREIGN KEY REFERENCES Estados(id_estado),
+
 );
-CREATE TABLE Valor_Tipo_Cancha (
-    id_valor_tipo_cancha INT NOT NULL PRIMARY KEY IDENTITY (1,1),
-    id_tipo_cancha INT NOT NULL FOREIGN KEY REFERENCES Tipos_Cancha(id_tipo_cancha),
-    valor MONEY NOT NULL CHECK (valor > 0) -- Asegura que el valor sea positivo
-);
-CREATE TABLE Tipo_Cancha (
-    id_tipo_cancha INT NOT NULL PRIMARY KEY IDENTITY (1,1),
-    id_valor_tipo_cancha INT NOT NULL FOREIGN KEY REFERENCES Valor_Tipo_Cancha(id_valor_tipo_cancha),
-    nombre VARCHAR(50) NOT NULL
-);
+
+
 
 
