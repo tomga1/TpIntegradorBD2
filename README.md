@@ -87,9 +87,11 @@ CREATE TABLE Horarios_Disponibles (
     id_cancha INT NOT NULL FOREIGN KEY REFERENCES Cancha(id_cancha),
     id_estado INT NOT NULL FOREIGN KEY REFERENCES Estados(id_estado),
     hora_inicio DATETIME NOT NULL,
-    hora_fin DATETIME NOT NULL CHECK (hora_fin > hora_inicio),
-    dia_semana INT NOT NULL CHECK (dia_semana BETWEEN 0 AND 6) -- 0 = Domingo, 6 = Sábado
+    hora_fin DATETIME NOT NULL,
+    dia_semana INT NOT NULL CHECK (dia_semana BETWEEN 0 AND 6),
+    CONSTRAINT CHK_Horario_Valido CHECK (hora_fin > hora_inicio)
 );
+
 
 CREATE TABLE Reservas (
     id_reserva INT NOT NULL PRIMARY KEY IDENTITY (1,1),
@@ -108,10 +110,11 @@ CREATE TABLE Promociones (
     id_tipo_cancha INT NOT NULL FOREIGN KEY REFERENCES Tipo_Cancha(id_tipo_cancha),
     nombre_promocion VARCHAR(100) NOT NULL,
     fecha_inicio DATETIME NOT NULL,
-    fecha_fin DATETIME NOT NULL CHECK (fecha_fin > fecha_inicio),
-    dia_semana INT NOT NULL CHECK (dia_semana BETWEEN 0 AND 6), -- 0 = Domingo, 6 = Sábado
+    fecha_fin DATETIME NOT NULL,
+    dia_semana INT NOT NULL CHECK (dia_semana BETWEEN 0 AND 6),
     desc_porcentual DECIMAL(5,2) NOT NULL CHECK (desc_porcentual BETWEEN 0 AND 100),
-    id_estado INT NOT NULL FOREIGN KEY REFERENCES Estados(id_estado)
+    id_estado INT NOT NULL FOREIGN KEY REFERENCES Estados(id_estado),
+    CONSTRAINT CHK_Fecha_Valida CHECK (fecha_fin > fecha_inicio)
 );
 
 
