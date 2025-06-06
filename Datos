@@ -1,38 +1,76 @@
-EN ESTE ESPCIO VAMOS A IR CARGANDO LOS DATOS PARA NUESTRAS TABLAS
+-- EN ESTE ESPCIO VAMOS A IR CARGANDO LOS DATOS PARA NUESTRAS TABLAS
 
-LOS MISMOS FUERON GENERADOS A TRAVES DE COPILOT 
+-- LOS MISMOS FUERON GENERADOS A TRAVES DE COPILOT 
+
+-- Estados
+INSERT INTO Estados (Descripcion) VALUES ('Activo'), ('Inactivo'), ('Cancelado');
+
+-- Roles
+INSERT INTO Roles (Nombre_Rol) VALUES ('Administrador'), ('Cliente');
+
+-- Localidades
+INSERT INTO localidad (nombre) VALUES
+('La Plata'),
+('Mar del Plata'),
+('Bahía Blanca'),
+('Quilmes'),
+('San Isidro'),
+('Tigre'),
+('Morón'),
+('Lomas de Zamora'),
+('Avellaneda'),
+('San Fernando');
+
+-- Sucursales
+INSERT INTO Sucursal (id_localidad, nombre, telefono, mail) VALUES
+(1, 'Estadio Único', '2214567890', 'info@unicola.com'),
+(2, 'Cancha Marplatense', '2235678901', 'contacto@marplatense.com'),
+(3, 'Club Bahiense', '2916789012', 'club@bahiense.com'),
+(4, 'Quilmes Arena', '0117890123', 'arena@quilmes.com'),
+(5, 'San Isidro FC', '0118901234', 'info@sanisidrof.com'),
+(6, 'Tigre Stadium', '0119012345', 'contacto@tigrestadium.com'),
+(7, 'Morón Sports', '0119123456', 'info@moronsports.com'),
+(8, 'Lomas Park', '0119234567', 'info@lomaspark.com'),
+(9, 'Avellaneda Soccer', '0119345678', 'club@avellanedasoccer.com'),
+(9, 'San Fernando Arena', '0119456789', 'arena@sanfernando.com'),
+(1, 'La Plata Champions', '2219567890', 'contacto@championslaplata.com'),
+(1, 'Mar del Plata FC', '2239678901', 'club@marfc.com'),
+(3, 'Bahía Soccer', '2919789012', 'info@bahiasoccer.com'),
+(4, 'Quilmes United', '0119890123', 'united@quilmes.com'),
+(5, 'San Isidro Stadium', '0119991234', 'stadium@sanisidro.com'),
+(6, 'Tigre FC', '0119092345', 'info@tigrefc.com'),
+(7, 'Morón Club', '0119193456', 'club@moron.com'),
+(8, 'Lomas de Zamora FC', '0119294567', 'zamora@lomasfc.com'),
+(9, 'Avellaneda Champions', '0119395678', 'champions@avellaneda.com'),
+(10, 'San Fernando Sport', '0119496789', 'sport@sanfernando.com');
+
+-- Usuarios
+INSERT INTO Usuarios (id_rol, id_estado, Nombre, Apellido, Direccion, CUIT, Telefono, Contraseña, Fecha_Alta)
+VALUES (1, 1, 'Juan', 'Pérez', 'Av. Siempre Viva 123', '20-12345678-9', '1234567890', 'pass1234', GETDATE());
+
+-- Tipo de Cancha
+INSERT INTO Tipo_Cancha (nombre) VALUES ('Fútbol 5'), ('Fútbol 7');
+
+-- Valor tipo cancha
+INSERT INTO Valor_Tipo_Cancha (id_tipo_cancha, valor) VALUES (1, 3000), (2, 4500);
+
+-- Canchas
+INSERT INTO Cancha (id_estado, id_tipo_cancha, id_sucursal, nombre, iluminacion, techada)
+VALUES (1, 1, 1, 'Cancha A', 1, 0);
+
+-- Horarios disponibles
+INSERT INTO Horarios_Disponibles (id_cancha, id_estado, hora_inicio, hora_fin, dia_semana)
+VALUES (1, 1, '2025-06-07 18:00:00', '2025-06-07 19:00:00', 6);
+
+-- Promociones
+INSERT INTO Promociones (id_valor_tipo_cancha, id_tipo_cancha, nombre_promocion, fecha_inicio, fecha_fin, dia_semana, desc_porcentual, id_estado)
+VALUES (1, 1, 'Promo Sábado', '2025-06-01T00:00:00', '2025-06-30T23:59:59', 6, 20.00, 1);
 
 
-INSERT INTO localidad (id, nombre) VALUES
-(1, 'La Plata'),
-(2, 'Mar del Plata'),
-(3, 'Bahía Blanca'),
-(4, 'Quilmes'),
-(5, 'San Isidro'),
-(6, 'Tigre'),
-(7, 'Morón'),
-(8, 'Lomas de Zamora'),
-(9, 'Avellaneda'),
-(10, 'San Fernando');
+-- Reservas
+INSERT INTO Reservas (id_usuario, id_cancha, id_estado, hora_inicio, hora_fin, monto_total)
+VALUES (1, 1, 1, '2025-06-07 18:00:00', '2025-06-07 19:00:00', 2400);
 
-INSERT INTO Sucursal (id_sucursal, id_localidad, nombre, telefono, mail) VALUES
-(1, 1, 'Estadio Único', '2214567890', 'info@unicola.com'),
-(2, 2, 'Cancha Marplatense', '2235678901', 'contacto@marplatense.com'),
-(3, 3, 'Club Bahiense', '2916789012', 'club@bahiense.com'),
-(4, 4, 'Quilmes Arena', '0117890123', 'arena@quilmes.com'),
-(5, 5, 'San Isidro FC', '0118901234', 'info@sanisidrof.com'),
-(6, 6, 'Tigre Stadium', '0119012345', 'contacto@tigrestadium.com'),
-(7, 7, 'Morón Sports', '0119123456', 'info@moronsports.com'),
-(8, 8, 'Lomas Park', '0119234567', 'info@lomaspark.com'),
-(9, 9, 'Avellaneda Soccer', '0119345678', 'club@avellanedasoccer.com'),
-(10, 10, 'San Fernando Arena', '0119456789', 'arena@sanfernando.com'),
-(11, 1, 'La Plata Champions', '2219567890', 'contacto@championslaplata.com'),
-(12, 2, 'Mar del Plata FC', '2239678901', 'club@marfc.com'),
-(13, 3, 'Bahía Soccer', '2919789012', 'info@bahiasoccer.com'),
-(14, 4, 'Quilmes United', '0119890123', 'united@quilmes.com'),
-(15, 5, 'San Isidro Stadium', '0119991234', 'stadium@sanisidro.com'),
-(16, 6, 'Tigre FC', '0119092345', 'info@tigrefc.com'),
-(17, 7, 'Morón Club', '0119193456', 'club@moron.com'),
-(18, 8, 'Lomas de Zamora FC', '0119294567', 'zamora@lomasfc.com'),
-(19, 9, 'Avellaneda Champions', '0119395678', 'champions@avellaneda.com'),
-(20, 10, 'San Fernando Sport', '0119496789', 'sport@sanfernando.com');
+
+
+
