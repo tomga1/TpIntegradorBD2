@@ -1,0 +1,27 @@
+-- VISTA VW_ReservasDetalle
+-- Proporcionar un resumen consolidado y legible de todas las reservas realizadas, 
+-- incluyendo información del usuario, cancha, sucursal, tipo de cancha, estado de la reserva, 
+-- horario y monto total. Esta vista es ideal para reportes administrativos, estadísticas y gestión general.
+
+CREATE VIEW vw_ReservasDetalle AS
+SELECT 
+    r.id_reserva,
+    r.fecha_reserva,
+    r.hora_inicio,
+    r.hora_fin,
+    r.monto_total,
+    u.Nombre + ' ' + u.Apellido AS nombre_usuario,
+    c.Nombre AS nombre_cancha,
+    s.Nombre AS nombre_sucursal,
+    tc.nombre AS tipo_cancha,
+    e.Descripcion AS estado_reserva,
+    c.iluminacion,
+    c.techada
+FROM RESERVAS r
+JOIN USUARIOS u ON r.id_usuario = u.id_usuario
+JOIN CANCHA c ON r.id_cancha = c.id_cancha
+JOIN TIPO_CANCHA tc ON c.id_tipo_cancha = tc.id_tipo_cancha
+JOIN SUCURSAL s ON c.id_sucursal = s.id_sucursal
+JOIN ESTADOS e ON r.id_estado = e.id_estado;
+
+-- ------------------------------------------------------------------/
