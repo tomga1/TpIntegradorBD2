@@ -25,3 +25,26 @@ JOIN SUCURSAL s ON c.id_sucursal = s.id_sucursal
 JOIN ESTADOS e ON r.id_estado = e.id_estado;
 
 -- ------------------------------------------------------------------/
+
+Vista vw_PromocionesActivas
+Esta vista muestra todas las promociones que están activas en este momento. Incluye el nombre de la promoción,
+el tipo de cancha a la que aplica (como Fútbol 5 o Fútbol 7), el rango de fechas en el que la promo está vigente, 
+el día de la semana en que se puede usar, el porcentaje de descuento y el estado de la promoción.
+Es útil para que el personal o el sistema de reservas puedan ver rápidamente qué promociones están disponibles sin tener que buscar entre todas las promociones cargadas. 
+Ideal para atención al cliente,
+planificación de ofertas y mostrar promociones vigentes en la web o en el sistema interno.
+
+CREATE VIEW vw_PromocionesActivas AS
+SELECT 
+    p.nombre_promocion,
+    tc.nombre AS tipo_cancha,
+    p.fecha_inicio,
+    p.fecha_fin,
+    p.dia_semana,
+    p.desc_porcentual AS descuento,
+    e.descripcion AS estado
+FROM promociones p
+JOIN tipo_cancha tc ON p.id_tipo_cancha = tc.id_tipo_cancha
+JOIN estados e ON p.id_estado = e.id_estado
+WHERE GETDATE() BETWEEN p.fecha_inicio AND p.fecha_fin
+  AND e.descripcion = 'Activo';
