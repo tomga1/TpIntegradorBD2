@@ -48,3 +48,25 @@ JOIN tipo_cancha tc ON p.id_tipo_cancha = tc.id_tipo_cancha
 JOIN estados e ON p.id_estado = e.id_estado
 WHERE GETDATE() BETWEEN p.fecha_inicio AND p.fecha_fin
   AND e.descripcion = 'Activo';
+
+-- ------------------------------------------------------------------/
+
+Vista vw_Canchas
+Esta vista generada nos hace un resumen general de las canchas
+Simplificando que tipo de canchas hay, si son o no liluminadas o techas, en que sucursal y localidad estan
+Facilitando al usuario el filtro de busquedas en lo que busca
+
+CREATE VIEW vw_Canchas as
+SELECT
+	C.nombre as 'Nombre Cancha',
+	C.iluminacion,
+	C.techada,
+	TC.nombre as 'Tipo Cancha',
+	S.nombre as 'Nombre Sucursal',
+	S.telefono,
+	L.nombre as 'Localidad'
+
+FROM Cancha C
+JOIN Tipo_Cancha TC ON C.id_tipo_cancha = TC.id_tipo_cancha
+JOIN Sucursal S ON C.id_sucursal = S.id_sucursal
+JOIN Localidad L ON C.id_sucursal = L.id_localidad
