@@ -1,0 +1,22 @@
+-- SP_RegistrarUsuario,
+-- permite registrar un nuevo usuario en el sistema. Antes de realizar el alta,
+-- valida que no exista otro usuario con el mismo CUIT para evitar duplicados. 
+-- Si la validación es exitosa, se inserta el nuevo registro con su nombre, CUIT, contraseña y rol asignado.
+
+
+CREATE PROCEDURE SP_RegistrarUsuario
+    @Nombre NVARCHAR(100),
+    @CUIT VARCHAR(20),
+    @Contraseña NVARCHAR(100),
+    @IDRol INT
+AS
+BEGIN
+    IF EXISTS (SELECT 1 FROM Usuarios WHERE CUIT = @CUIT)
+        RAISERROR('El CUIT ya está registrado.', 16, 1)
+    ELSE
+        INSERT INTO Usuarios (Nombre, CUIT, Contraseña, id_rol)
+        VALUES (@Nombre, @CUIT, @Contraseña, @IDRol)
+END
+
+
+-- ------------------------------------------------------------------------
