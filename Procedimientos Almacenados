@@ -20,3 +20,28 @@ END
 
 
 -- ------------------------------------------------------------------------
+
+--SP_ReservasOK,
+--Nos permite registrar una reserva verificando que ya no exista,
+--Una en el horario y fecha indicada
+--En caso que se quiera registar en el mimso día y horario, nos tira un error,
+
+
+CREATE PROCEDURE SP_ReservasOK
+    @HoraInicial DATETIME,
+    @HoraFinal DATETIME,
+    @FechaReserva DATETIME,
+    @ValorCancha MONEY
+AS
+BEGIN
+    IF EXISTS (SELECT 1 FROM Reservas WHERE hora_inicio = @HoraInicial)
+    BEGIN
+        RAISERROR ('El horario ya se encuentra reservado', 16, 1);
+        RETURN;
+    END
+    ELSE
+    BEGIN
+        INSERT INTO Reservas (hora_inicio, hora_fin, fecha_reserva, monto_total)
+        VALUES (@HoraInicial, @HoraFinal, @FechaReserva, @ValorCancha);
+    END
+END;
