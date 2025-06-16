@@ -1,5 +1,8 @@
 CREATE DATABASE Canchas_BD2;
 
+USE Canchas_BD2;
+GO
+
 CREATE TABLE Estados (
     id_estado INT IDENTITY (1,1) NOT NULL PRIMARY KEY,
     Descripcion VARCHAR (50) NOT NULL
