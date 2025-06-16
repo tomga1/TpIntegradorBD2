@@ -21,3 +21,24 @@ BEGIN
 END;
 
 -- --------------------------------------------------------------------------------------
+-- Creamos el trigger TR_CerrarPromocionesVencidas el cual actualiza automáticamente el estado
+-- de las promociones insertadas o actualizadas que ya se encuentren vencidas.
+-- Si la fecha de fin de una promoción recién agregada o modificada ya pasó,
+-- el trigger cambia su id_estado a 2 (inactivo), evitando que se apliquen promociones caducadas.
+
+CREATE TRIGGER TR_CerrarPromocionesVencidas
+ON Promociones
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    UPDATE p
+    SET id_estado = 2 -- Inactivo
+    FROM Promociones p
+    INNER JOIN inserted i ON p.id_promocion = i.id_promocion
+    WHERE i.fecha_fin < GETDATE() AND i.id_estado = 1;
+END;
+
+
+
+
+
