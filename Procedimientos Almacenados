@@ -6,18 +6,28 @@
 
 CREATE PROCEDURE SP_RegistrarUsuario
     @Nombre NVARCHAR(100),
+    @Apellido NVARCHAR(100),
+    @Direccion NVARCHAR(100),
     @CUIT VARCHAR(20),
+    @Telefono VARCHAR(20),
     @Contraseña NVARCHAR(100),
     @IDRol INT
 AS
 BEGIN
     IF EXISTS (SELECT 1 FROM Usuarios WHERE CUIT = @CUIT)
-        RAISERROR('El CUIT ya está registrado.', 16, 1)
+    BEGIN
+        RAISERROR('El CUIT ya está registrado.', 16, 1);
+    END
     ELSE
-        INSERT INTO Usuarios (Nombre, CUIT, Contraseña, id_rol)
-        VALUES (@Nombre, @CUIT, @Contraseña, @IDRol)
+    BEGIN
+        INSERT INTO Usuarios (
+            Nombre, Apellido, Direccion, CUIT, Telefono, Contraseña, id_rol, id_estado, Fecha_Alta
+        )
+        VALUES (
+            @Nombre, @Apellido, @Direccion, @CUIT, @Telefono, @Contraseña, @IDRol, 1, GETDATE()
+        );
+    END
 END
-
 
 -- ------------------------------------------------------------------------
 
