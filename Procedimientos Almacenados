@@ -38,6 +38,8 @@ END
 
 
 CREATE PROCEDURE SP_ReservasOK
+    @IDUsuario INT,
+	@IDEstado INT,
     @HoraInicial DATETIME,
     @HoraFinal DATETIME,
     @FechaReserva DATETIME,
@@ -51,7 +53,7 @@ BEGIN
     END
     ELSE
     BEGIN
-        INSERT INTO Reservas (hora_inicio, hora_fin, fecha_reserva, monto_total)
-        VALUES (@HoraInicial, @HoraFinal, @FechaReserva, @ValorCancha);
+        INSERT INTO Reservas (id_usuario,id_estado, hora_inicio, hora_fin, fecha_reserva, monto_total)
+        VALUES (@IDUsuario ,@IDEstado, @HoraInicial, @HoraFinal, @FechaReserva, @ValorCancha);
     END
 END;
