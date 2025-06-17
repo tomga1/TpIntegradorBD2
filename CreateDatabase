@@ -13,12 +13,12 @@ CREATE TABLE Roles (
     Nombre_Rol VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE Localidad (
+CREATE TABLE Localidades (
     id_localidad INT IDENTITY (1,1) NOT NULL PRIMARY KEY,
     Nombre VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE Sucursal (
+CREATE TABLE Sucursales (
     id_sucursal INT IDENTITY (1,1) NOT NULL PRIMARY KEY,
     id_localidad INT NOT NULL FOREIGN KEY REFERENCES Localidad (id_localidad),
     Nombre VARCHAR (50),
@@ -50,7 +50,7 @@ CREATE TABLE Valor_Tipo_Cancha (
     valor MONEY NOT NULL CHECK (valor > 0)
 );
 
-CREATE TABLE Cancha (
+CREATE TABLE Canchas (
     id_cancha INT NOT NULL PRIMARY KEY IDENTITY (1,1),
     id_estado INT NOT NULL FOREIGN KEY REFERENCES Estados(id_estado),
     id_tipo_cancha INT NOT NULL FOREIGN KEY REFERENCES Tipo_Cancha(id_tipo_cancha),
