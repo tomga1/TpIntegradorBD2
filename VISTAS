@@ -21,18 +21,18 @@ FROM RESERVAS r
 JOIN USUARIOS u ON r.id_usuario = u.id_usuario
 JOIN CANCHAS c ON r.id_cancha = c.id_cancha
 JOIN TIPO_CANCHA tc ON c.id_tipo_cancha = tc.id_tipo_cancha
-JOIN SUCURSAL s ON c.id_sucursal = s.id_sucursal
+JOIN SUCURSALES s ON c.id_sucursal = s.id_sucursal
 JOIN ESTADOS e ON r.id_estado = e.id_estado;
 
 -- ------------------------------------------------------------------/
 
-Vista vw_PromocionesActivas
-Esta vista muestra todas las promociones que están activas en este momento. Incluye el nombre de la promoción,
-el tipo de cancha a la que aplica (como Fútbol 5 o Fútbol 7), el rango de fechas en el que la promo está vigente, 
-el día de la semana en que se puede usar, el porcentaje de descuento y el estado de la promoción.
-Es útil para que el personal o el sistema de reservas puedan ver rápidamente qué promociones están disponibles sin tener que buscar entre todas las promociones cargadas. 
-Ideal para atención al cliente,
-planificación de ofertas y mostrar promociones vigentes en la web o en el sistema interno.
+--Vista vw_PromocionesActivas
+--Esta vista muestra todas las promociones que están activas en este momento. Incluye el nombre de la promoción,
+--el tipo de cancha a la que aplica (como Fútbol 5 o Fútbol 7), el rango de fechas en el que la promo está vigente, 
+--el día de la semana en que se puede usar, el porcentaje de descuento y el estado de la promoción.
+--Es útil para que el personal o el sistema de reservas puedan ver rápidamente qué promociones están disponibles sin tener que buscar entre todas las promociones cargadas. 
+--Ideal para atención al cliente,
+--planificación de ofertas y mostrar promociones vigentes en la web o en el sistema interno.
 
 CREATE VIEW vw_PromocionesActivas AS
 SELECT 
@@ -51,10 +51,10 @@ WHERE GETDATE() BETWEEN p.fecha_inicio AND p.fecha_fin
 
 -- ------------------------------------------------------------------/
 
-Vista vw_Canchas
-Esta vista generada nos hace un resumen general de las canchas
-Simplificando que tipo de canchas hay, si son o no liluminadas o techas, en que sucursal y localidad estan
-Facilitando al usuario el filtro de busquedas en lo que busca
+--Vista vw_Canchas
+--Esta vista generada nos hace un resumen general de las canchas
+--Simplificando que tipo de canchas hay, si son o no liluminadas o techas, en que sucursal y localidad estan
+--Facilitando al usuario el filtro de busquedas en lo que busca
 
 CREATE VIEW vw_Canchas as
 SELECT
@@ -68,5 +68,5 @@ SELECT
 
 FROM Canchas C
 JOIN Tipo_Cancha TC ON C.id_tipo_cancha = TC.id_tipo_cancha
-JOIN Sucursal S ON C.id_sucursal = S.id_sucursal
-JOIN Localidad L ON C.id_sucursal = L.id_localidad
+JOIN Sucursales S ON C.id_sucursal = S.id_sucursal
+JOIN Localidades L ON C.id_sucursal = L.id_localidad
