@@ -2,7 +2,7 @@
 -- En lugar de eliminar la cancha cuando se ejecuta un DELETE, realiza una baja lógica, 
 -- actualizando el campo id_estado a 2 (estado inactivo)
 
-CREATE TRIGGER TR_BajaLogicaCancha 
+CREATE TRIGGER TR_BajaLogicaCanchas 
 ON Cancha
 INSTEAD OF DELETE
 AS 
