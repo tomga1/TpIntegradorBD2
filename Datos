@@ -9,7 +9,7 @@ INSERT INTO Estados (Descripcion) VALUES ('Activo'), ('Inactivo'), ('Cancelado')
 INSERT INTO Roles (Nombre_Rol) VALUES ('Administrador'), ('Cliente');
 
 -- Localidades
-INSERT INTO localidad (nombre) VALUES
+INSERT INTO Localidades(nombre) VALUES
 ('La Plata'),
 ('Mar del Plata'),
 ('Bahía Blanca'),
@@ -22,7 +22,7 @@ INSERT INTO localidad (nombre) VALUES
 ('San Fernando');
 
 -- Sucursales
-INSERT INTO Sucursal (id_localidad, nombre, telefono, mail) VALUES
+INSERT INTO Sucursales (id_localidad, nombre, telefono, mail) VALUES
 (1, 'Estadio Único', '2214567890', 'info@unicola.com'),
 (2, 'Cancha Marplatense', '2235678901', 'contacto@marplatense.com'),
 (3, 'Club Bahiense', '2916789012', 'club@bahiense.com'),
@@ -55,7 +55,7 @@ INSERT INTO Tipo_Cancha (nombre) VALUES ('Fútbol 5'), ('Fútbol 7');
 INSERT INTO Valor_Tipo_Cancha (id_tipo_cancha, valor) VALUES (1, 3000), (2, 4500);
 
 -- Canchas
-INSERT INTO Cancha (id_estado, id_tipo_cancha, id_sucursal, nombre, iluminacion, techada)
+INSERT INTO Canchas (id_estado, id_tipo_cancha, id_sucursal, nombre, iluminacion, techada)
 VALUES (1, 1, 1, 'Cancha A', 1, 0);
 
 -- Horarios disponibles
@@ -70,7 +70,5 @@ VALUES (1, 1, 'Promo Sábado', '2025-06-01T00:00:00', '2025-06-30T23:59:59', 6, 
 -- Reservas
 INSERT INTO Reservas (id_usuario, id_cancha, id_estado, hora_inicio, hora_fin, monto_total)
 VALUES (1, 1, 1, '2025-06-07 18:00:00', '2025-06-07 19:00:00', 2400);
-
-
 
 
