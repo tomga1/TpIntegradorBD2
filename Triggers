@@ -3,7 +3,7 @@
 -- actualizando el campo id_estado a 2 (estado inactivo)
 
 CREATE TRIGGER TR_BajaLogicaCanchas 
-ON Cancha
+ON Canchas
 INSTEAD OF DELETE
 AS 
 BEGIN
@@ -11,7 +11,7 @@ BEGIN
         BEGIN TRANSACTION
         UPDATE c
         SET id_estado = 2
-        FROM Cancha c
+        FROM Canchas c
         JOIN deleted d ON c.id_cancha = d.id_cancha
         COMMIT TRANSACTION
     END TRY
