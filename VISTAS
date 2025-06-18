@@ -1,9 +1,9 @@
--- VISTA VW_ReservasDetalle
+-- VISTA VW_ReservasDetalles
 -- Proporcionar un resumen consolidado y legible de todas las reservas realizadas, 
 -- incluyendo información del usuario, cancha, sucursal, tipo de cancha, estado de la reserva, 
 -- horario y monto total. Esta vista es ideal para reportes administrativos, estadísticas y gestión general.
 
-CREATE VIEW vw_ReservasDetalle AS
+CREATE VIEW vw_ReservasDetalles AS
 SELECT 
     r.id_reserva,
     r.fecha_reserva,
