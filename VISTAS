@@ -19,7 +19,7 @@ SELECT
     c.techada
 FROM RESERVAS r
 JOIN USUARIOS u ON r.id_usuario = u.id_usuario
-JOIN CANCHA c ON r.id_cancha = c.id_cancha
+JOIN CANCHAS c ON r.id_cancha = c.id_cancha
 JOIN TIPO_CANCHA tc ON c.id_tipo_cancha = tc.id_tipo_cancha
 JOIN SUCURSAL s ON c.id_sucursal = s.id_sucursal
 JOIN ESTADOS e ON r.id_estado = e.id_estado;
@@ -66,7 +66,7 @@ SELECT
 	S.telefono,
 	L.nombre as 'Localidad'
 
-FROM Cancha C
+FROM Canchas C
 JOIN Tipo_Cancha TC ON C.id_tipo_cancha = TC.id_tipo_cancha
 JOIN Sucursal S ON C.id_sucursal = S.id_sucursal
 JOIN Localidad L ON C.id_sucursal = L.id_localidad
