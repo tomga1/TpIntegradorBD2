@@ -1,4 +1,4 @@
--- Creamos el trigger TR_BajaLogicaCancha el cual evita el borrado físico de registros en la tabla Cancha. 
+-- Creamos el trigger TR_BajaLogicaCanchas el cual evita el borrado físico de registros en la tabla Cancha. 
 -- En lugar de eliminar la cancha cuando se ejecuta un DELETE, realiza una baja lógica, 
 -- actualizando el campo id_estado a 2 (estado inactivo)
 
