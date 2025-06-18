@@ -1,10 +1,10 @@
--- SP_RegistrarUsuario,
+-- SP_RegistrarUsuarios,
 -- permite registrar un nuevo usuario en el sistema. Antes de realizar el alta,
 -- valida que no exista otro usuario con el mismo CUIT para evitar duplicados. 
 -- Si la validación es exitosa, se inserta el nuevo registro con su nombre, CUIT, contraseña y rol asignado.
 
 
-CREATE PROCEDURE SP_RegistrarUsuario
+CREATE PROCEDURE SP_RegistrarUsuarios
     @Nombre NVARCHAR(100),
     @Apellido NVARCHAR(100),
     @Direccion NVARCHAR(100),
@@ -43,7 +43,7 @@ CREATE PROCEDURE SP_ReservasOK
     @HoraInicial DATETIME,
     @HoraFinal DATETIME,
     @FechaReserva DATETIME,
-    @ValorCancha MONEY
+    @ValorCanchas MONEY
 AS
 BEGIN
     IF EXISTS (SELECT 1 FROM Reservas WHERE hora_inicio = @HoraInicial)
@@ -54,6 +54,6 @@ BEGIN
     ELSE
     BEGIN
         INSERT INTO Reservas (id_usuario,id_estado, hora_inicio, hora_fin, fecha_reserva, monto_total)
-        VALUES (@IDUsuario ,@IDEstado, @HoraInicial, @HoraFinal, @FechaReserva, @ValorCancha);
+        VALUES (@IDUsuario ,@IDEstado, @HoraInicial, @HoraFinal, @FechaReserva, @ValorCanchas);
     END
 END;
