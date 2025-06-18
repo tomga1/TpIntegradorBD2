@@ -1,6 +1,6 @@
-CREATE DATABASE Canchas_BD2;
+CREATE DATABASE Canchas_BD2_V2;
 
-USE Canchas_BD2;
+USE Canchas_BD2_V2;
 GO
 
 CREATE TABLE Estados (
@@ -20,7 +20,7 @@ CREATE TABLE Localidades (
 
 CREATE TABLE Sucursales (
     id_sucursal INT IDENTITY (1,1) NOT NULL PRIMARY KEY,
-    id_localidad INT NOT NULL FOREIGN KEY REFERENCES Localidad (id_localidad),
+    id_localidad INT NOT NULL FOREIGN KEY REFERENCES Localidades (id_localidad),
     Nombre VARCHAR (50),
     Telefono VARCHAR (20),
     Mail VARCHAR (50)
