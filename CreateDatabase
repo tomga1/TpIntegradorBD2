@@ -1,4 +1,5 @@
 CREATE DATABASE Canchas_BD2_V2;
+GO
 
 USE Canchas_BD2_V2;
 GO
@@ -20,23 +21,26 @@ CREATE TABLE Localidades (
 
 CREATE TABLE Sucursales (
     id_sucursal INT IDENTITY (1,1) NOT NULL PRIMARY KEY,
-    id_localidad INT NOT NULL FOREIGN KEY REFERENCES Localidades (id_localidad),
+    id_localidad INT NOT NULL,
     Nombre VARCHAR (50),
     Telefono VARCHAR (20),
-    Mail VARCHAR (50)
+    Mail VARCHAR (50),
+    FOREIGN KEY (id_localidad) REFERENCES Localidades (id_localidad)
 );    
 
 CREATE TABLE Usuarios (
     id_usuario INT IDENTITY (1,1) NOT NULL PRIMARY KEY,
-    id_rol INT NOT NULL FOREIGN KEY REFERENCES Roles (id_rol),
-    id_estado INT NOT NULL FOREIGN KEY REFERENCES Estados (id_estado),
+    id_rol INT NOT NULL,
+    id_estado INT NOT NULL,
     Nombre VARCHAR (50),
     Apellido VARCHAR (50),
     Direccion VARCHAR (50),
     CUIT CHAR(20),
     Telefono CHAR(10),
     Contraseña VARCHAR (20),
-    Fecha_Alta DATETIME
+    Fecha_Alta DATETIME,
+    FOREIGN KEY (id_rol) REFERENCES Roles (id_rol),
+    FOREIGN KEY (id_estado) REFERENCES Estados (id_estado)
 );
 
 CREATE TABLE Tipo_Cancha (
@@ -46,51 +50,62 @@ CREATE TABLE Tipo_Cancha (
 
 CREATE TABLE Valor_Tipo_Cancha (
     id_valor_tipo_cancha INT NOT NULL PRIMARY KEY IDENTITY (1,1),
-    id_tipo_cancha INT NOT NULL FOREIGN KEY REFERENCES Tipo_Cancha(id_tipo_cancha),
-    valor MONEY NOT NULL CHECK (valor > 0)
+    id_tipo_cancha INT NOT NULL,
+    valor MONEY NOT NULL CHECK (valor > 0),
+    FOREIGN KEY (id_tipo_cancha) REFERENCES Tipo_Cancha(id_tipo_cancha)
 );
 
 CREATE TABLE Canchas (
     id_cancha INT NOT NULL PRIMARY KEY IDENTITY (1,1),
-    id_estado INT NOT NULL FOREIGN KEY REFERENCES Estados(id_estado),
-    id_tipo_cancha INT NOT NULL FOREIGN KEY REFERENCES Tipo_Cancha(id_tipo_cancha),
-    id_sucursal INT NOT NULL FOREIGN KEY REFERENCES Sucursales(id_sucursal),
+    id_estado INT NOT NULL,
+    id_tipo_cancha INT NOT NULL,
+    id_sucursal INT NOT NULL,
     nombre VARCHAR(50) NOT NULL,
     iluminacion BIT NOT NULL CHECK (iluminacion IN (0, 1)), -- 0: Sin iluminación, 1: Con iluminación
-    techada BIT NOT NULL CHECK (techada IN (0, 1)) -- 0: No techada, 1: Techada
+    techada BIT NOT NULL CHECK (techada IN (0, 1)), -- 0: No techada, 1: Techada
+    FOREIGN KEY (id_estado) REFERENCES Estados(id_estado),
+    FOREIGN KEY (id_tipo_cancha) REFERENCES Tipo_Cancha(id_tipo_cancha),
+    FOREIGN KEY (id_sucursal) REFERENCES Sucursales(id_sucursal)
 );
 
 CREATE TABLE Horarios_Disponibles (
     id_horario_dispo INT NOT NULL PRIMARY KEY IDENTITY (1,1),
-    id_cancha INT NOT NULL FOREIGN KEY REFERENCES Canchas(id_cancha),
-    id_estado INT NOT NULL FOREIGN KEY REFERENCES Estados(id_estado),
+    id_cancha INT NOT NULL,
+    id_estado INT NOT NULL,
     hora_inicio DATETIME NOT NULL,
     hora_fin DATETIME NOT NULL,
     dia_semana INT NOT NULL CHECK (dia_semana BETWEEN 0 AND 6),
+    FOREIGN KEY (id_cancha) REFERENCES Canchas(id_cancha),
+    FOREIGN KEY (id_estado) REFERENCES Estados(id_estado),
     CONSTRAINT CHK_Horario_Valido CHECK (hora_fin > hora_inicio)
 );
 
-
 CREATE TABLE Reservas (
     id_reserva INT NOT NULL PRIMARY KEY IDENTITY (1,1),
-    id_usuario INT NOT NULL FOREIGN KEY REFERENCES Usuarios(id_usuario),
-    id_cancha INT FOREIGN KEY REFERENCES Canchas(id_cancha),
-    id_estado INT NOT NULL FOREIGN KEY REFERENCES Estados(id_estado),
+    id_usuario INT NOT NULL,
+    id_cancha INT,
+    id_estado INT NOT NULL,
     hora_fin DATETIME,
     hora_inicio DATETIME NOT NULL,
     fecha_reserva DATETIME DEFAULT GETDATE(),
-    monto_total MONEY
+    monto_total MONEY,
+    FOREIGN KEY (id_usuario) REFERENCES Usuarios(id_usuario),
+    FOREIGN KEY (id_cancha) REFERENCES Canchas(id_cancha),
+    FOREIGN KEY (id_estado) REFERENCES Estados(id_estado)
 );
 
 CREATE TABLE Promociones (
     id_promocion INT NOT NULL PRIMARY KEY IDENTITY (1,1),
-    id_valor_tipo_cancha INT NOT NULL FOREIGN KEY REFERENCES Valor_Tipo_Cancha(id_valor_tipo_cancha),
-    id_tipo_cancha INT NOT NULL FOREIGN KEY REFERENCES Tipo_Cancha(id_tipo_cancha),
+    id_valor_tipo_cancha INT NOT NULL,
+    id_tipo_cancha INT NOT NULL,
     nombre_promocion VARCHAR(100) NOT NULL,
     fecha_inicio DATETIME NOT NULL,
     fecha_fin DATETIME NOT NULL,
     dia_semana INT NOT NULL CHECK (dia_semana BETWEEN 0 AND 6),
     desc_porcentual DECIMAL(5,2) NOT NULL CHECK (desc_porcentual BETWEEN 0 AND 100),
-    id_estado INT NOT NULL FOREIGN KEY REFERENCES Estados(id_estado),
+    id_estado INT NOT NULL,
+    FOREIGN KEY (id_valor_tipo_cancha) REFERENCES Valor_Tipo_Cancha(id_valor_tipo_cancha),
+    FOREIGN KEY (id_tipo_cancha) REFERENCES Tipo_Cancha(id_tipo_cancha),
+    FOREIGN KEY (id_estado) REFERENCES Estados(id_estado),
     CONSTRAINT CHK_Fecha_Valida CHECK (fecha_fin > fecha_inicio)
 );
