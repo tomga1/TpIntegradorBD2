@@ -1,0 +1,300 @@
+CREATE DATABASE Canchas_BD2_V2;
+GO
+
+USE Canchas_BD2_V2;
+GO
+
+CREATE TABLE Estados (
+    id_estado INT IDENTITY (1,1) NOT NULL PRIMARY KEY,
+    Descripcion VARCHAR (50) NOT NULL
+);
+
+CREATE TABLE Roles (
+    id_rol INT IDENTITY (1,1) NOT NULL PRIMARY KEY,
+    Nombre_Rol VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Localidades (
+    id_localidad INT IDENTITY (1,1) NOT NULL PRIMARY KEY,
+    Nombre VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Sucursales (
+    id_sucursal INT IDENTITY (1,1) NOT NULL PRIMARY KEY,
+    id_localidad INT NOT NULL,
+    Nombre VARCHAR (50),
+    Telefono VARCHAR (20),
+    Mail VARCHAR (50),
+    FOREIGN KEY (id_localidad) REFERENCES Localidades (id_localidad)
+);    
+
+CREATE TABLE Usuarios (
+    id_usuario INT IDENTITY (1,1) NOT NULL PRIMARY KEY,
+    id_rol INT NOT NULL,
+    id_estado INT NOT NULL,
+    Nombre VARCHAR (50),
+    Apellido VARCHAR (50),
+    Direccion VARCHAR (50),
+    CUIT CHAR(20),
+    Telefono CHAR(10),
+    Contraseña VARCHAR (20),
+    Fecha_Alta DATETIME,
+    FOREIGN KEY (id_rol) REFERENCES Roles (id_rol),
+    FOREIGN KEY (id_estado) REFERENCES Estados (id_estado)
+);
+
+CREATE TABLE Tipo_Cancha (
+    id_tipo_cancha INT NOT NULL PRIMARY KEY IDENTITY (1,1),
+    nombre VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Valor_Tipo_Cancha (
+    id_valor_tipo_cancha INT NOT NULL PRIMARY KEY IDENTITY (1,1),
+    id_tipo_cancha INT NOT NULL,
+    valor MONEY NOT NULL CHECK (valor > 0),
+    FOREIGN KEY (id_tipo_cancha) REFERENCES Tipo_Cancha(id_tipo_cancha)
+);
+
+CREATE TABLE Canchas (
+    id_cancha INT NOT NULL PRIMARY KEY IDENTITY (1,1),
+    id_estado INT NOT NULL,
+    id_tipo_cancha INT NOT NULL,
+    id_sucursal INT NOT NULL,
+    nombre VARCHAR(50) NOT NULL,
+    iluminacion BIT NOT NULL CHECK (iluminacion IN (0, 1)), -- 0: Sin iluminación, 1: Con iluminación
+    techada BIT NOT NULL CHECK (techada IN (0, 1)), -- 0: No techada, 1: Techada
+    FOREIGN KEY (id_estado) REFERENCES Estados(id_estado),
+    FOREIGN KEY (id_tipo_cancha) REFERENCES Tipo_Cancha(id_tipo_cancha),
+    FOREIGN KEY (id_sucursal) REFERENCES Sucursales(id_sucursal)
+);
+
+CREATE TABLE Horarios_Disponibles (
+    id_horario_dispo INT NOT NULL PRIMARY KEY IDENTITY (1,1),
+    id_cancha INT NOT NULL,
+    id_estado INT NOT NULL,
+    hora_inicio DATETIME NOT NULL,
+    hora_fin DATETIME NOT NULL,
+    dia_semana INT NOT NULL CHECK (dia_semana BETWEEN 0 AND 6),
+    FOREIGN KEY (id_cancha) REFERENCES Canchas(id_cancha),
+    FOREIGN KEY (id_estado) REFERENCES Estados(id_estado),
+    CONSTRAINT CHK_Horario_Valido CHECK (hora_fin > hora_inicio)
+);
+
+CREATE TABLE Reservas (
+    id_reserva INT NOT NULL PRIMARY KEY IDENTITY (1,1),
+    id_usuario INT NOT NULL,
+    id_cancha INT,
+    id_estado INT NOT NULL,
+    hora_fin DATETIME,
+    hora_inicio DATETIME NOT NULL,
+    fecha_reserva DATETIME DEFAULT GETDATE(),
+    monto_total MONEY,
+    FOREIGN KEY (id_usuario) REFERENCES Usuarios(id_usuario),
+    FOREIGN KEY (id_cancha) REFERENCES Canchas(id_cancha),
+    FOREIGN KEY (id_estado) REFERENCES Estados(id_estado)
+);
+
+CREATE TABLE Promociones (
+    id_promocion INT NOT NULL PRIMARY KEY IDENTITY (1,1),
+    id_valor_tipo_cancha INT NOT NULL,
+    id_tipo_cancha INT NOT NULL,
+    nombre_promocion VARCHAR(100) NOT NULL,
+    fecha_inicio DATETIME NOT NULL,
+    fecha_fin DATETIME NOT NULL,
+    dia_semana INT NOT NULL CHECK (dia_semana BETWEEN 0 AND 6),
+    desc_porcentual DECIMAL(5,2) NOT NULL CHECK (desc_porcentual BETWEEN 0 AND 100),
+    id_estado INT NOT NULL,
+    FOREIGN KEY (id_valor_tipo_cancha) REFERENCES Valor_Tipo_Cancha(id_valor_tipo_cancha),
+    FOREIGN KEY (id_tipo_cancha) REFERENCES Tipo_Cancha(id_tipo_cancha),
+    FOREIGN KEY (id_estado) REFERENCES Estados(id_estado),
+    CONSTRAINT CHK_Fecha_Valida CHECK (fecha_fin > fecha_inicio)
+);
+
+INSERT INTO Localidades(nombre) VALUES
+('La Plata'),
+('Mar del Plata'),
+('Bahía Blanca'),
+('Quilmes'),
+('San Isidro'),
+('Tigre'),
+('Morón'),
+('Lomas de Zamora'),
+('Avellaneda'),
+('San Fernando');
+
+INSERT INTO Sucursales (id_localidad, nombre, telefono, mail) VALUES
+(1, 'Estadio Único', '2214567890', 'info@unicola.com'),
+(2, 'Cancha Marplatense', '2235678901', 'contacto@marplatense.com'),
+(3, 'Club Bahiense', '2916789012', 'club@bahiense.com'),
+(4, 'Quilmes Arena', '0117890123', 'arena@quilmes.com'),
+(5, 'San Isidro FC', '0118901234', 'info@sanisidrof.com'),
+(6, 'Tigre Stadium', '0119012345', 'contacto@tigrestadium.com'),
+(7, 'Morón Sports', '0119123456', 'info@moronsports.com'),
+(8, 'Lomas Park', '0119234567', 'info@lomaspark.com'),
+(9, 'Avellaneda Soccer', '0119345678', 'club@avellanedasoccer.com'),
+(9, 'San Fernando Arena', '0119456789', 'arena@sanfernando.com'),
+(1, 'La Plata Champions', '2219567890', 'contacto@championslaplata.com'),
+(1, 'Mar del Plata FC', '2239678901', 'club@marfc.com'),
+(3, 'Bahía Soccer', '2919789012', 'info@bahiasoccer.com'),
+(4, 'Quilmes United', '0119890123', 'united@quilmes.com'),
+(5, 'San Isidro Stadium', '0119991234', 'stadium@sanisidro.com'),
+(6, 'Tigre FC', '0119092345', 'info@tigrefc.com'),
+(7, 'Morón Club', '0119193456', 'club@moron.com'),
+(8, 'Lomas de Zamora FC', '0119294567', 'zamora@lomasfc.com'),
+(9, 'Avellaneda Champions', '0119395678', 'champions@avellaneda.com'),
+(10, 'San Fernando Sport', '0119496789', 'sport@sanfernando.com');
+
+
+INSERT INTO Usuarios (id_rol, id_estado, Nombre, Apellido, Direccion, CUIT, Telefono, Contraseña, Fecha_Alta)
+VALUES (1, 1, 'Juan', 'Pérez', 'Av. Siempre Viva 123', '20-12345678-9', '1234567890', 'pass1234', GETDATE());
+
+
+INSERT INTO Tipo_Cancha (nombre) VALUES ('Fútbol 5'), ('Fútbol 7');
+
+
+INSERT INTO Valor_Tipo_Cancha (id_tipo_cancha, valor) VALUES (1, 3000), (2, 4500);
+
+
+INSERT INTO Canchas (id_estado, id_tipo_cancha, id_sucursal, nombre, iluminacion, techada)
+VALUES (1, 1, 1, 'Cancha A', 1, 0);
+
+INSERT INTO Horarios_Disponibles (id_cancha, id_estado, hora_inicio, hora_fin, dia_semana)
+VALUES (1, 1, '2025-06-07 18:00:00', '2025-06-07 19:00:00', 6);
+
+INSERT INTO Promociones (id_valor_tipo_cancha, id_tipo_cancha, nombre_promocion, fecha_inicio, fecha_fin, dia_semana, desc_porcentual, id_estado)
+VALUES (1, 1, 'Promo Sábado', '2025-06-01T00:00:00', '2025-06-30T23:59:59', 6, 20.00, 1);
+
+INSERT INTO Reservas (id_usuario, id_cancha, id_estado, hora_inicio, hora_fin, monto_total)
+VALUES (1, 1, 1, '2025-06-07 18:00:00', '2025-06-07 19:00:00', 2400);
+
+CREATE PROCEDURE SP_RegistrarUsuarios
+    @Nombre NVARCHAR(100),
+    @Apellido NVARCHAR(100),
+    @Direccion NVARCHAR(100),
+    @CUIT VARCHAR(20),
+    @Telefono VARCHAR(20),
+    @Contraseña NVARCHAR(100),
+    @IDRol INT
+AS
+BEGIN
+    IF EXISTS (SELECT 1 FROM Usuarios WHERE CUIT = @CUIT)
+    BEGIN
+        RAISERROR('El CUIT ya está registrado.', 16, 1);
+    END
+    ELSE
+    BEGIN
+        INSERT INTO Usuarios (
+            Nombre, Apellido, Direccion, CUIT, Telefono, Contraseña, id_rol, id_estado, Fecha_Alta
+        )
+        VALUES (
+            @Nombre, @Apellido, @Direccion, @CUIT, @Telefono, @Contraseña, @IDRol, 1, GETDATE()
+        );
+    END
+END;
+
+CREATE PROCEDURE SP_ReservasOK
+    @IDUsuario INT,
+	@IDEstado INT,
+    @HoraInicial DATETIME,
+    @HoraFinal DATETIME,
+    @FechaReserva DATETIME,
+    @ValorCanchas MONEY
+AS
+BEGIN
+    IF EXISTS (SELECT 1 FROM Reservas WHERE hora_inicio = @HoraInicial)
+    BEGIN
+        RAISERROR ('El horario ya se encuentra reservado', 16, 1);
+        RETURN;
+    END
+    ELSE
+    BEGIN
+        INSERT INTO Reservas (id_usuario,id_estado, hora_inicio, hora_fin, fecha_reserva, monto_total)
+        VALUES (@IDUsuario ,@IDEstado, @HoraInicial, @HoraFinal, @FechaReserva, @ValorCanchas);
+    END
+END;
+
+CREATE TRIGGER TR_BajaLogicaCanchas 
+ON Canchas
+INSTEAD OF DELETE
+AS 
+BEGIN
+    BEGIN TRY
+        BEGIN TRANSACTION
+        UPDATE c
+        SET id_estado = 2
+        FROM Canchas c
+        JOIN deleted d ON c.id_cancha = d.id_cancha
+        COMMIT TRANSACTION
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION
+    END CATCH
+END;
+
+
+CREATE TRIGGER TR_CerrarPromocionesVencidas
+ON Promociones
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    UPDATE p
+    SET id_estado = 2 -- Inactivo
+    FROM Promociones p
+    INNER JOIN inserted i ON p.id_promocion = i.id_promocion
+    WHERE i.fecha_fin < GETDATE() AND i.id_estado = 1;
+END;
+
+
+CREATE VIEW vw_ReservasDetalles AS
+SELECT 
+    r.id_reserva,
+    r.fecha_reserva,
+    r.hora_inicio,
+    r.hora_fin,
+    r.monto_total,
+    u.Nombre + ' ' + u.Apellido AS nombre_usuario,
+    c.Nombre AS nombre_cancha,
+    s.Nombre AS nombre_sucursal,
+    tc.nombre AS tipo_cancha,
+    e.Descripcion AS estado_reserva,
+    c.iluminacion,
+    c.techada
+FROM RESERVAS r
+JOIN USUARIOS u ON r.id_usuario = u.id_usuario
+JOIN CANCHAS c ON r.id_cancha = c.id_cancha
+JOIN TIPO_CANCHA tc ON c.id_tipo_cancha = tc.id_tipo_cancha
+JOIN SUCURSALES s ON c.id_sucursal = s.id_sucursal
+JOIN ESTADOS e ON r.id_estado = e.id_estado;
+
+CREATE VIEW vw_PromocionesActivas AS
+SELECT 
+    p.nombre_promocion,
+    tc.nombre AS tipo_cancha,
+    p.fecha_inicio,
+    p.fecha_fin,
+    p.dia_semana,
+    p.desc_porcentual AS descuento,
+    e.descripcion AS estado
+FROM promociones p
+JOIN tipo_cancha tc ON p.id_tipo_cancha = tc.id_tipo_cancha
+JOIN estados e ON p.id_estado = e.id_estado
+WHERE GETDATE() BETWEEN p.fecha_inicio AND p.fecha_fin
+  AND e.descripcion = 'Activo';
+
+CREATE VIEW vw_Canchas as
+SELECT
+	C.nombre as 'Nombre Cancha',
+	C.iluminacion,
+	C.techada,
+	TC.nombre as 'Tipo Cancha',
+	S.nombre as 'Nombre Sucursal',
+	S.telefono,
+	L.nombre as 'Localidad'
+
+FROM Canchas C
+JOIN Tipo_Cancha TC ON C.id_tipo_cancha = TC.id_tipo_cancha
+JOIN Sucursales S ON C.id_sucursal = S.id_sucursal
+JOIN Localidades L ON C.id_sucursal = L.id_localidad
+
+
+
