@@ -110,6 +110,9 @@ CREATE TABLE Promociones (
     CONSTRAINT CHK_Fecha_Valida CHECK (fecha_fin > fecha_inicio)
 );
 
+INSERT INTO Estados (Descripcion) VALUES ('Activo'), ('Inactivo');
+
+
 INSERT INTO Localidades(nombre) VALUES
 ('La Plata'),
 ('Mar del Plata'),
@@ -145,6 +148,10 @@ INSERT INTO Sucursales (id_localidad, nombre, telefono, mail) VALUES
 (10, 'San Fernando Sport', '0119496789', 'sport@sanfernando.com');
 
 
+INSERT INTO Roles (Nombre_Rol) VALUES ('Administrador'), ('Empleado');
+
+
+
 INSERT INTO Usuarios (id_rol, id_estado, Nombre, Apellido, Direccion, CUIT, Telefono, Contraseña, Fecha_Alta)
 VALUES (1, 1, 'Juan', 'Pérez', 'Av. Siempre Viva 123', '20-12345678-9', '1234567890', 'pass1234', GETDATE());
 
@@ -164,8 +171,12 @@ VALUES (1, 1, '2025-06-07 18:00:00', '2025-06-07 19:00:00', 6);
 INSERT INTO Promociones (id_valor_tipo_cancha, id_tipo_cancha, nombre_promocion, fecha_inicio, fecha_fin, dia_semana, desc_porcentual, id_estado)
 VALUES (1, 1, 'Promo Sábado', '2025-06-01T00:00:00', '2025-06-30T23:59:59', 6, 20.00, 1);
 
+
 INSERT INTO Reservas (id_usuario, id_cancha, id_estado, hora_inicio, hora_fin, monto_total)
 VALUES (1, 1, 1, '2025-06-07 18:00:00', '2025-06-07 19:00:00', 2400);
+
+
+
 
 CREATE PROCEDURE SP_RegistrarUsuarios
     @Nombre NVARCHAR(100),
@@ -294,7 +305,4 @@ SELECT
 FROM Canchas C
 JOIN Tipo_Cancha TC ON C.id_tipo_cancha = TC.id_tipo_cancha
 JOIN Sucursales S ON C.id_sucursal = S.id_sucursal
-JOIN Localidades L ON C.id_sucursal = L.id_localidad
-
-
-
+JOIN Localidades L ON C.id_sucursal = L.id_localidad;
